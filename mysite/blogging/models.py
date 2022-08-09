@@ -17,32 +17,21 @@ class Post(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    posts = models.ManyToManyField(Post, blank=True, related_name='categories')
+    posts = models.ForeignKey(Post,on_delete=models.CASCADE)
     def __str__(self):
         return self.name
     class Meta:
         verbose_name_plural = 'Categories'
 
-class Role(models.Model):
-    role_name = models.CharField(max_length=100)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+# Step 3 Category Inline
 class CategoryInline(admin.TabularInline):
     model = Category
     extra = 1
-
-class RoleInline(admin.TabularInline):
-    model = Role
-    extra = 1
-
-class PostInline(admin.TabularInline):
-    model = Post
-    extra = 1
-
+#Step 2
 class PostAdmin(admin.ModelAdmin):
-    inlines = (RoleInline,)
-
+    inlines = (CategoryInline,)
+#Step 2
 class CategoryAdmin(admin.ModelAdmin):
-    inlines = (RoleInline,)
+    #Step 4
     exclude =('posts',)
