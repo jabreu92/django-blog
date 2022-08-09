@@ -25,6 +25,8 @@ def list_view(request):
     return HttpResponse(body, content_type="text/html")
 
 class BloggingListView(ListView):
+    queryset = Post.objects.order_by('-published_date')
+    #queryset = reversed(Post.objects.filter(pk__in = list))
     model = Post
     template_name = 'blogging/list.html'
 
