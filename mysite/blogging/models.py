@@ -1,8 +1,8 @@
-
 # Create your models here.
 from django.db import models  # <-- This is already in the file
 from django.contrib.auth.models import User
 from django.contrib import admin
+
 
 class Post(models.Model):
     title = models.CharField(max_length=128)
@@ -11,27 +11,35 @@ class Post(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
     published_date = models.DateTimeField(blank=True, null=True)
+
     def __str__(self) -> str:
         return self.title
+
 
 class Category(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    posts = models.ForeignKey(Post,on_delete=models.CASCADE)
+    posts = models.ForeignKey(Post, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.name
+
     class Meta:
-        verbose_name_plural = 'Categories'
+        verbose_name_plural = "Categories"
 
 
 # Step 3 Category Inline
 class CategoryInline(admin.TabularInline):
     model = Category
     extra = 1
-#Step 2
+
+
+# Step 2
 class PostAdmin(admin.ModelAdmin):
     inlines = (CategoryInline,)
-#Step 2
+
+
+# Step 2
 class CategoryAdmin(admin.ModelAdmin):
-    #Step 4
-    exclude =('posts',)
+    # Step 4
+    exclude = ("posts",)
