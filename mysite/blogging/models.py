@@ -19,7 +19,7 @@ class Post(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    posts = models.ForeignKey(Post, on_delete=models.CASCADE)
+    posts = models.ManyToManyField(Post, blank=True, related_name="categories")
 
     def __str__(self):
         return self.name
@@ -28,18 +28,12 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
 
-# Step 3 Category Inline
 class CategoryInline(admin.TabularInline):
-    model = Category
-    extra = 1
+    model = Category.posts.through
 
 
-# Step 2
 class PostAdmin(admin.ModelAdmin):
     inlines = (CategoryInline,)
 
-
-# Step 2
 class CategoryAdmin(admin.ModelAdmin):
-    # Step 4
     exclude = ("posts",)
